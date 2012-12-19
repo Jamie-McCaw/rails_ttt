@@ -1,6 +1,6 @@
 class AddPlayerToTictactoe < ActiveRecord::Migration
   def change
-    alter_table :tictactoes do |t|
+    add_column :tictactoes do |t|
 
     	t.string :player
 
