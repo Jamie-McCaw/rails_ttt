@@ -32,9 +32,3 @@ setInterval(function(){
 		}
 	}, dataType: "json"});
 }, 1000);
-
-//(function poll(){
-//	$.ajax({ url: "/board", succcess: function(data){
-//		console.log(data);
-//	}, dataType: "json", complete: poll, timeout: 30000 });
-//})();
