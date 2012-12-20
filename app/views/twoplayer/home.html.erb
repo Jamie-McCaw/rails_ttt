@@ -5,7 +5,7 @@
 			<div class='clear'></div>
 			<div class='row'>
 				<% r.each_with_index do |c, i| %>
-					<div class='cell' id="<%= @cells.index(c) %>" onclick="make_move(this);"><br /><%= c %></div>
+					<div class='cell' id="<%= @cells.index(c) %>" onclick="make_move_multiplayer(this);"><br /><%= c %></div>
 				<% end %>
 			</div>
 		<% end %>

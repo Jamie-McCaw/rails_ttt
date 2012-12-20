@@ -1,4 +1,4 @@
-function make_move(cell){ 
+function make_move_multiplayer(cell){ 
 	$.ajaxSetup({async:false});
 
 	$.get('/twoplayer/move/' + cell.id, function(data) {

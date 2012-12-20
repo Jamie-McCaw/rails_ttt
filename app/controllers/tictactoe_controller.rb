@@ -20,11 +20,9 @@ class TictactoeController < ApplicationController
 		game = Game.new
 		tttgame = Tictactoe.find(session[:game_id])
 		game.board.cells = tttgame.game
-
 		if game.board.game_over? || !game.board.move_available?(params['cell'].to_i)
 			@move = 'invalid'
 			check_game_state(game)
-
 		else
 			game.board.move(params["cell"].to_i, 'X')
 			if !game.board.game_over?
