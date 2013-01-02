@@ -2,6 +2,10 @@ class Tictactoe < ActiveRecord::Base
   attr_accessible :game
   serialize :game
 
+  X_PLAYER = 'X'
+  O_PLAYER = 'O'
+
+
   def self.create_x_game
     tttgame = Tictactoe.new
     tttgame.game = Game.new.board.cells 
@@ -17,80 +21,79 @@ class Tictactoe < ActiveRecord::Base
     tttgame
   end
 
-  def self.play_move_for(game_id, player_id, cell)
-    game = Game.new
+  def self.play_move_for(game_id, player, cell)
     tttgame = Tictactoe.find(game_id)
-    player = player_id
-    game.board.cells = tttgame.game
+    tttgame.move(player, cell)
+  end
 
-    if not_playable?(game, cell)
-      invalid_choice(game)
+  def move(moved_player, cell)
+    if not_playable?(cell)
+      invalid_choice
     else
-      if player == tttgame.player
-        make_the_move(tttgame, game, player, cell)
+      if moved_player == player
+        make_the_move(moved_player, cell)
       else
-        invalid_choice(game)
+        invalid_choice
       end
     end
   end
 
-  def self.move_setup(game_id, player_id)
+  def board
     game = Game.new
-    tttgame = Tictactoe.find(game_id)
-    player = player_id
-    game.board.cells = tttgame.game
-    return game, tttgame, player
+    game.board.cells = self.game
+    return game
   end
 
-  def self.get_game_state(game)
-    if game.board.winner
-      return game.board.winner
-    elsif game.board.tie?
+  def get_game_state
+    if board.board.winner
+      return board.board.winner
+    elsif board.board.tie?
       return 'Tie'
     else
       return 'Continue the Game'
     end
   end
 
-  def self.not_playable?(game, cell)
-    game.board.game_over? || !game.board.move_available?(cell)
+  def not_playable?(cell)
+    board.board.game_over? || !board.board.move_available?(cell)
   end
 
-  def self.invalid_choice(game)
+  def invalid_choice
     @move = 'invalid'
-    check_game_state(game)
+    check_game_state
   end
 
-  def self.check_game_state(game)
+  def check_game_state
     if @move == 'invalid'
-      return game, 'invalid'
-    elsif game.board.winner
-      return game, 'winner'
-    elsif game.board.tie?
-      return game, 'tie'
+      return board, 'invalid'
+    elsif board.board.winner
+      return board, 'winner'
+    elsif board.board.tie?
+      return board, 'tie'
     else
-      return game, 'playon'
+      return board, 'playon'
     end
   end
 
-  def self.make_the_move(tttgame, game, player, cell)
-    place_move_on_board(game, player, cell)
-    switch_player(tttgame)
-    save_game(tttgame, game)
+  def make_the_move(player, cell)
+    place_move_on_board(board, player, cell)
+    switch_player
+    save_game
   end
 
-  def self.save_game(tttgame, game)
-    tttgame.game = game.board.cells
-    tttgame.save
+  def save_game
+    self.game = board.board.cells
+    self.save
   end
 
-  def self.place_move_on_board(game, player, cell)
-    game.board.move(cell, player)
-    check_game_state(game)
+  def place_move_on_board(game, player, cell)
+    board.board.move(cell, player)
+    check_game_state
   end
 
-  def self.switch_player(tttgame)
-    tttgame.player = tttgame.player == X_PLAYER ? O_PLAYER : X_PLAYER
+  def switch_player
+    current_player = self.player
+    self.player = (current_player == X_PLAYER ? O_PLAYER : X_PLAYER)
   end
 
 end

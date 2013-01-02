@@ -4,9 +4,6 @@ require 'tictactoe/inputoutput'
 require 'tictactoe/board3x3'
 require 'tictactoe/ai'
 
-X_PLAYER = 'X'
-O_PLAYER = 'O'
-
 class TwoplayerController < ApplicationController
 	def home
           tttgame = Tictactoe.create_x_game
@@ -38,7 +35,7 @@ class TwoplayerController < ApplicationController
 	end
 
 	def move
-          game, result = TicTacToe.play_move_for(session[:game_id], session[:player_id], params[:cell].to_i)
+          game, result = Tictactoe.play_move_for(session[:game_id], session[:player_id], params[:cell].to_i)
 
           case result
           when 'invalid'
@@ -53,9 +50,9 @@ class TwoplayerController < ApplicationController
 	end
 
 	def board
-          game, tttgame, player = Tictactoe.move_setup(session[:game_id], session[:player_id])
+          tttgame = Tictactoe.find(session[:game_id])
           turn = tttgame.player
-          game_state_data = Tictactoe.get_game_state(game)
+          game_state_data = tttgame.get_game_state
           render :json => { :board => tttgame.game, :players_turn => turn, :state => game_state_data }
 	end
 
