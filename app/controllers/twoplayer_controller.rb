@@ -4,11 +4,14 @@ require 'tictactoe/inputoutput'
 require 'tictactoe/board3x3'
 require 'tictactoe/ai'
 
+X_PLAYER = 'X'
+O_PLAYER = 'O'
+
 class TwoplayerController < ApplicationController
 	def home
 		tttgame = Tictactoe.new
 		tttgame.game = Game.new.board.cells 
-		tttgame.player = 'X'
+		tttgame.player = X_PLAYER
 		tttgame.save
 		set_session_ids(tttgame)
 		set_view_variables(tttgame)
@@ -16,7 +19,7 @@ class TwoplayerController < ApplicationController
 
 	def second_player
 		tttgame = Tictactoe.find(params['id'])
-		tttgame.player = 'O'
+		tttgame.player = O_PLAYER
 		tttgame.save
 		set_session_ids(tttgame)
 		set_view_variables(tttgame)
@@ -82,22 +85,24 @@ class TwoplayerController < ApplicationController
 	end
 
 	def switch_player(tttgame)
-		tttgame.player = tttgame.player == 'X' ? 'O' : 'X'
+		tttgame.player = tttgame.player == X_PLAYER ? O_PLAYER : X_PLAYER
 	end
 
 	def board
-		game = Game.new
-		tttgame = Tictactoe.find(session[:game_id])
-		game.board.cells = tttgame.game
+		game, tttgame, player = move_setup
 		turn = tttgame.player
+		game_state_data = get_game_state(game)
+		render :json => { :board => tttgame.game, :players_turn => turn, :state => game_state_data }
+	end
+
+	def get_game_state(game)
 		if game.board.winner
-			board_type = game.board.winner
+			return game.board.winner
 		elsif game.board.tie?
-			board_type = 'Tie'
+			return 'Tie'
 		else
-			board_type = 'Continue the Game'
+			return 'Continue the Game'
 		end
-		render :json => { :board => tttgame.game, :players_turn => turn, :state => board_type }
 	end
 
 	def game_over(game)
