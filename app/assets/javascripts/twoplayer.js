@@ -29,6 +29,13 @@ setInterval(function(){
 	$.ajax({ url: '/board', success: function(data){
 		for(i=0;i<(data['board'].length);i++){
 			document.getElementById(i).innerHTML = '<br />' + data['board'][i];
+			if (data['state'] == 'Tie') { 
+				document.getElementById('label').innerHTML = 'Tie Game';
+			} else if (data['state'] == 'X' || data['state'] == 'O') {
+				document.getElementById('label').innerHTML = 'Player ' + data['state'] + ' Wins';
+			} else {
+				document.getElementById('label').innerHTML = 'Player ' + data['players_turn'] + "'s Turn";
+			}
 		}
 	}, dataType: "json"});
 }, 1000);
