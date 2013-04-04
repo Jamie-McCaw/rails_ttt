@@ -6,6 +6,7 @@ gem 'pry'
 gem 'bcrypt-ruby'
 gem 'faker'
 gem 'jquery-rails'
+gem 'json'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
