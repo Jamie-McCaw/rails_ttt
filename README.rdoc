@@ -1,1 +1,5 @@
-This is my first attempt at a Ruby on Rails Multiplayer game, the game is hosted on heroku and playable by going to: http://sheltered-shelf-2084.herokuapp.com/twoplayer
+This is my first attempt at a Ruby on Rails Multiplayer game, the game is hosted on heroku and playable by going to: http://rail-tic-tac-toe.herokuapp.com/twoplayer
+
+This works by sending your opponent a link created after taking your first move.
+
+You can also play the single player vs. AI unbeatable Tic-Tac-Toe at: http://rail-tic-tac-toe.herokuapp.com/
